@@ -58,7 +58,7 @@ public class GameEngine extends JFrame
 		x = 10;
 		y = 10;
 		color = Color.YELLOW;
-		setTitle("Title");
+		setTitle(ResourceString.getString("Title"));
 		setSize(windowWidth, windowHeight);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
