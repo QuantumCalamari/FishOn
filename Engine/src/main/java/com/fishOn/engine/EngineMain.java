@@ -1,5 +1,7 @@
 package main.java.com.fishOn.engine;
 
+import javax.swing.JFrame;
+
 public class EngineMain
 {
 	public static void main(String[] args)
@@ -8,4 +10,5 @@ public class EngineMain
 		gameEngine.run();
 		System.exit(0);
 	}
+
 }

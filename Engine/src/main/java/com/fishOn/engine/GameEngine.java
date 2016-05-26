@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
@@ -12,13 +14,18 @@ public class GameEngine extends JFrame
 {
 	private static final long serialVersionUID = -5024743624066497330L;
 	static boolean isRunning = true;
-	static int fps, windowWidth, windowHeight, x, y, dx, dy;
-
-	static BufferedImage background;
+	static int fps, x, y, dx, dy;
+	static int windowWidth = 400, windowHeight = 300; 
+	
+	
+	static BufferedImage background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 	static Color color;
 	static InputHandler input;
 	static Insets insets;
 	Sprite mudkip;
+	Screen screen = new Screen(windowWidth, windowHeight);
+	
+	private int[] pixels = ((DataBufferInt)background.getRaster().getDataBuffer()).getData();
 
 	public void run()
 	{
@@ -73,7 +80,8 @@ public class GameEngine extends JFrame
 		addMouseListener(input);
 		insets = getInsets();
 		setSize(insets.left + windowWidth + insets.right, insets.top + windowHeight + insets.bottom);
-		background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+		//I did this previously, maybe we should re do it here?
+		//		background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 	}
 
 	public void update()
@@ -118,17 +126,34 @@ public class GameEngine extends JFrame
 
 	public void draw()
 	{
+		//I added a buffer strategy
+		BufferStrategy bs = getBufferStrategy();
+		
+		if (bs == null) {
+			createBufferStrategy(3);
+			return;
+		}
+		
 		Graphics graphics, backgroundGraphics;
 
-		backgroundGraphics = background.getGraphics();
-		graphics = getGraphics();		
+		backgroundGraphics = background.getGraphics();		
 
+		screen.clear();
+		screen.render();
+		
+		for (int i = 0; i < pixels.length;i++) {
+			pixels[i] = screen.pixels[i];
+		}
+		
 		backgroundGraphics.setColor(Color.BLACK);
 		backgroundGraphics.fillRect(0, 0, windowWidth, windowHeight);
 		
 		backgroundGraphics.drawImage(mudkip.getIcon(), x, y, this);
 
-
-		graphics.drawImage(background, insets.left, insets.top, this);
+		graphics = bs.getDrawGraphics();
+		graphics.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+		graphics.dispose();
+		bs.show();
 	}
+
 }
