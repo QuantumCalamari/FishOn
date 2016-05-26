@@ -12,7 +12,7 @@ public class GameEngine extends JFrame
 {
 	private static final long serialVersionUID = -5024743624066497330L;
 	static boolean isRunning = true;
-	static int fps, windowWidth, windowHeight, x, y;
+	static int fps, windowWidth, windowHeight, x, y, dx, dy;
 
 	static BufferedImage background;
 	static Color color;
@@ -73,24 +73,41 @@ public class GameEngine extends JFrame
 
 	public void update()
 	{
+		move(5);
+	}
+	
+	public void move(int step)
+	{
 		if(input.isKeyDown(KeyEvent.VK_A))
 		{
-			x = x - 5;
+			if (x < step)
+				x = step;
+			else
+				x -= step;
 		}
 
 		if(input.isKeyDown(KeyEvent.VK_D))
 		{
-			x = x + 5;
+			if (x > (windowWidth - step - 50))
+				x = windowWidth - step - 50;
+			else
+				x += step;
 		}
 
 		if(input.isKeyDown(KeyEvent.VK_W))
 		{
-			y = y - 5;
+			if (y < step)
+				y = step;
+			else
+				y -= step;
 		}
 
 		if(input.isKeyDown(KeyEvent.VK_S))
 		{
-			y = y + 5;
+			if (y > (windowHeight - step - 50))
+				y = windowHeight - step - 50;
+			else
+				y += step;
 		}
 	}
 
