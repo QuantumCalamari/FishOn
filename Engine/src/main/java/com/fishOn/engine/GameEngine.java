@@ -18,6 +18,7 @@ public class GameEngine extends JFrame
 	static Color color;
 	static InputHandler input;
 	static Insets insets;
+	Sprite mudkip;
 
 	public void run()
 	{
@@ -52,9 +53,14 @@ public class GameEngine extends JFrame
 
 	public void initialize()
 	{
-		fps = 60;
-		windowWidth = 800;
-		windowHeight = 600;
+		//eventually i'd prefer to move this data to an .ini instead of the message folder
+		fps = Integer.parseInt(ResourceString.getString("FPS"));
+		windowWidth = Integer.parseInt(ResourceString.getString("WindowWidth"));
+		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));
+		
+		input = new InputHandler(this);
+		
+		mudkip = new Sprite("mudkip");
 		x = 10;
 		y = 10;
 		color = Color.YELLOW;
@@ -63,8 +69,7 @@ public class GameEngine extends JFrame
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-
-		input = new InputHandler(this);
+		
 		addMouseListener(input);
 		insets = getInsets();
 		setSize(insets.left + windowWidth + insets.right, insets.top + windowHeight + insets.bottom);
@@ -73,7 +78,7 @@ public class GameEngine extends JFrame
 
 	public void update()
 	{
-		move(5);
+		move(10);
 	}
 	
 	public void move(int step)
@@ -88,8 +93,8 @@ public class GameEngine extends JFrame
 
 		if(input.isKeyDown(KeyEvent.VK_D))
 		{
-			if (x > (windowWidth - step - 50))
-				x = windowWidth - step - 50;
+			if (x > (windowWidth - step - mudkip.getHitBox().getWidth()))
+				x = (int) (windowWidth - step - mudkip.getHitBox().getWidth());
 			else
 				x += step;
 		}
@@ -104,8 +109,8 @@ public class GameEngine extends JFrame
 
 		if(input.isKeyDown(KeyEvent.VK_S))
 		{
-			if (y > (windowHeight - step - 50))
-				y = windowHeight - step - 50;
+			if (y > (windowHeight - step - mudkip.getHitBox().getHeight()))
+				y = (int) (windowHeight - step - mudkip.getHitBox().getHeight());
 			else
 				y += step;
 		}
@@ -120,9 +125,9 @@ public class GameEngine extends JFrame
 
 		backgroundGraphics.setColor(Color.BLACK);
 		backgroundGraphics.fillRect(0, 0, windowWidth, windowHeight);
+		
+		backgroundGraphics.drawImage(mudkip.getIcon(), x, y, this);
 
-		backgroundGraphics.setColor(color);
-		backgroundGraphics.fillOval(x, y, 50, 50);		
 
 		graphics.drawImage(background, insets.left, insets.top, this);
 	}
