@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -14,8 +15,9 @@ public class GameEngine extends JFrame
 	static boolean isRunning = true;
 	static int fps, windowWidth, windowHeight, x, y, dx, dy;
 
-	static BufferedImage background;
+	static BufferedImage bufferedImage;
 	static Color color;
+	static ImageHandler imageHandler;
 	static InputHandler input;
 	static Insets insets;
 	Sprite mudkip;
@@ -53,27 +55,28 @@ public class GameEngine extends JFrame
 
 	public void initialize()
 	{
-		//eventually i'd prefer to move this data to an .ini instead of the message folder
-		fps = Integer.parseInt(ResourceString.getString("FPS"));
+		fps = Integer.parseInt(ResourceString.getString("FPS"));		
+		imageHandler = new ImageHandler();
+		input = new InputHandler(this);
+		mudkip = new Sprite("mudkip");
 		windowWidth = Integer.parseInt(ResourceString.getString("WindowWidth"));
 		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));
 		
-		input = new InputHandler(this);
-		
-		mudkip = new Sprite("mudkip");
 		x = 10;
 		y = 10;
 		color = Color.YELLOW;
+		
 		setTitle(ResourceString.getString("Title"));
 		setSize(windowWidth, windowHeight);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
+		createBufferStrategy(2);
 		
 		addMouseListener(input);
 		insets = getInsets();
 		setSize(insets.left + windowWidth + insets.right, insets.top + windowHeight + insets.bottom);
-		background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+		bufferedImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 	}
 
 	public void update()
@@ -114,21 +117,30 @@ public class GameEngine extends JFrame
 			else
 				y += step;
 		}
+		
+		mudkip.setPosx(x);
+		mudkip.setPosy(y);
 	}
 
 	public void draw()
 	{
-		Graphics graphics, backgroundGraphics;
+		BufferStrategy bufferStrategy;
+		Graphics graphics, background;
 
-		backgroundGraphics = background.getGraphics();
-		graphics = getGraphics();		
-
-		backgroundGraphics.setColor(Color.BLACK);
-		backgroundGraphics.fillRect(0, 0, windowWidth, windowHeight);
+		background = bufferedImage.getGraphics();
 		
-		backgroundGraphics.drawImage(mudkip.getIcon(), x, y, this);
+		bufferStrategy = getBufferStrategy();
+		if(bufferStrategy == null)
+		{
+			createBufferStrategy(3);
+		}
 
-
-		graphics.drawImage(background, insets.left, insets.top, this);
+		background.setColor(Color.BLACK);
+		background.fillRect(0, 0, windowWidth, windowHeight);
+		background.drawImage(mudkip.getIcon(), mudkip.getPosx(), mudkip.getPosy(), this);
+		graphics = bufferStrategy.getDrawGraphics();
+		graphics.drawImage(bufferedImage, insets.left, insets.top, this);
+		graphics.dispose();
+		bufferStrategy.show();
 	}
 }
