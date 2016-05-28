@@ -20,22 +20,14 @@ public class HitBox
 	
 	public boolean isCollide(Rectangle spriteHitbox)
 	{
-		boolean xCollide, yCollide;
-		int x1, x2, y1, y2, w1, w2, h1, h2;
+		boolean xCollide, yCollide;		
+		
 		xCollide = true;
 		yCollide = true;
-		x1 = rectangle.x;
-		x2 = spriteHitbox.x;
-		y1 = rectangle.y;
-		y2 = spriteHitbox.y;
-		w1 = rectangle.width;
-		w2 = spriteHitbox.width;
-		h1 = rectangle.height;
-		h2 = spriteHitbox.height;		
 		
-		if (((x2 + w2) < x1) || (x2 > (x1 + w1)))
+		if (((spriteHitbox.x + spriteHitbox.width) < rectangle.x) || (spriteHitbox.x > (rectangle.x + rectangle.width)))
 			xCollide = false;
-		if (((y2 + h2) < y1) || (y2 > (y1 + h1)))
+		if (((spriteHitbox.y + spriteHitbox.height) < rectangle.y) || (spriteHitbox.y > (rectangle.y + rectangle.height)))
 			yCollide = false;
 		
 		return (xCollide && yCollide);

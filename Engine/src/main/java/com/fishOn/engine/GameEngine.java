@@ -90,7 +90,7 @@ public class GameEngine extends JFrame
 	{
 		if(input.isKeyDown(KeyEvent.VK_A))
 		{
-			if (x < step)
+			if ((x < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				x = step;
 			else
 				x -= step;
@@ -98,7 +98,7 @@ public class GameEngine extends JFrame
 
 		if(input.isKeyDown(KeyEvent.VK_D))
 		{
-			if (x > (windowWidth - step - mudkip.getHitBox().getWidth()))
+			if ((x > (windowWidth - step - mudkip.getHitBox().getWidth())) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				x = (int) (windowWidth - step - mudkip.getHitBox().getWidth());
 			else
 				x += step;
@@ -106,7 +106,7 @@ public class GameEngine extends JFrame
 
 		if(input.isKeyDown(KeyEvent.VK_W))
 		{
-			if (y < step)
+			if ((y < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				y = step;
 			else
 				y -= step;
@@ -114,7 +114,7 @@ public class GameEngine extends JFrame
 
 		if(input.isKeyDown(KeyEvent.VK_S))
 		{
-			if (y > (windowHeight - step - mudkip.getHitBox().getHeight()))
+			if ((y > (windowHeight - step - mudkip.getHitBox().getHeight())) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				y = (int) (windowHeight - step - mudkip.getHitBox().getHeight());
 			else
 				y += step;

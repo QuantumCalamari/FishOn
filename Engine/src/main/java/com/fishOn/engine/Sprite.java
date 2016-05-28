@@ -1,7 +1,6 @@
 package main.java.com.fishOn.engine;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 public class Sprite
@@ -19,7 +18,7 @@ public class Sprite
 		icon = imageIcon.getImage();
 		width = imageIcon.getIconWidth();
 		height = imageIcon.getIconHeight();
-		hitBox = new HitBox(0, 0, width, height);
+		hitBox = new HitBox(0, 0, width - 20, height - 20);
 	}
 	
 	//Create a sprite with a scaled instance of a specified image
@@ -29,7 +28,7 @@ public class Sprite
 		icon = imageIcon.getImage();
 		this.width = width;
 		this.height = height;
-		hitBox = new HitBox(0, 0, width, height);
+		hitBox = new HitBox(0, 0, width - 20, height - 20);
 	}
 	
 	public Image getIcon()
