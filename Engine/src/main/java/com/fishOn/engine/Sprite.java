@@ -10,32 +10,26 @@ public class Sprite
 	ImageHandler imageHandler = new ImageHandler();
 	ImageIcon imageIcon;
 	int posx, posy, width, height;
-	Rectangle hitBox;
+	HitBox hitBox;
 	
 	//Create a sprite with a specified image
 	public Sprite(String imageName)
 	{
-		imageIcon = imageHandler.getImage(imageName);
-		hitBox = new Rectangle();
+		imageIcon = imageHandler.getImage(imageName);		
 		icon = imageIcon.getImage();
 		width = imageIcon.getIconWidth();
 		height = imageIcon.getIconHeight();
-		hitBox.setSize(width - 5, height - 5);
+		hitBox = new HitBox(0, 0, width, height);
 	}
 	
 	//Create a sprite with a scaled instance of a specified image
 	public Sprite(String imageName, int width, int height)
 	{
 		imageIcon = imageHandler.getImage(imageName, width, height);
-		hitBox = new Rectangle(width, height);
 		icon = imageIcon.getImage();
 		this.width = width;
 		this.height = height;
-	}
-
-	public void setVisible(boolean visible)
-	{
-		
+		hitBox = new HitBox(0, 0, width, height);
 	}
 	
 	public Image getIcon()
@@ -68,7 +62,7 @@ public class Sprite
 		return height;
 	}
 
-	public Rectangle getHitBox()
+	public HitBox getHitBox()
 	{
 		return hitBox;
 	}
@@ -86,11 +80,13 @@ public class Sprite
 	public void setPosx(int posx)
 	{
 		this.posx = posx;
+		hitBox.setX(posx);
 	}
 
 	public void setPosy(int posy)
 	{
 		this.posy = posy;
+		hitBox.setY(posy);
 	}
 
 	public void setWidth(int width)
@@ -103,7 +99,7 @@ public class Sprite
 		this.height = height;
 	}
 
-	public void setHitBox(Rectangle hitBox)
+	public void setHitBox(HitBox hitBox)
 	{
 		this.hitBox = hitBox;
 	}

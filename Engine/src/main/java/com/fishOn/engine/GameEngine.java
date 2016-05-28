@@ -21,6 +21,7 @@ public class GameEngine extends JFrame
 	static InputHandler input;
 	static Insets insets;
 	Sprite mudkip;
+	HitBox island;
 
 	public void run()
 	{
@@ -64,7 +65,6 @@ public class GameEngine extends JFrame
 		
 		x = 10;
 		y = 10;
-		color = Color.YELLOW;
 		
 		setTitle(ResourceString.getString("Title"));
 		setSize(windowWidth, windowHeight);
@@ -72,6 +72,8 @@ public class GameEngine extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		createBufferStrategy(2);
+		
+		island = new HitBox(200, 200, 200, 200);
 		
 		addMouseListener(input);
 		insets = getInsets();
@@ -120,6 +122,11 @@ public class GameEngine extends JFrame
 		
 		mudkip.setPosx(x);
 		mudkip.setPosy(y);
+		
+		if(island.isCollide(mudkip.getHitBox().rectangle))
+		{
+			System.out.println("COLLIDE!");
+		}
 	}
 
 	public void draw()
@@ -135,8 +142,10 @@ public class GameEngine extends JFrame
 			createBufferStrategy(3);
 		}
 
-		background.setColor(Color.BLACK);
+		background.setColor(Color.CYAN);
 		background.fillRect(0, 0, windowWidth, windowHeight);
+		background.setColor(Color.GREEN);
+		background.fillRect(200, 200, 200, 200);
 		background.drawImage(mudkip.getIcon(), mudkip.getPosx(), mudkip.getPosy(), this);
 		graphics = bufferStrategy.getDrawGraphics();
 		graphics.drawImage(bufferedImage, insets.left, insets.top, this);
