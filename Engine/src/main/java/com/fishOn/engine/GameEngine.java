@@ -6,7 +6,6 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
@@ -14,21 +13,18 @@ public class GameEngine extends JFrame implements Runnable
 {
 	private static final long serialVersionUID = -5024743624066497330L;
 	static boolean isRunning = true;
-	static int fps, x, y, dx, dy;
-	static int windowWidth = 300, windowHeight = 300; 
-	boolean running = false;
-	
-	private Thread thread;
-	
-	static BufferedImage background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+	static int fps, windowWidth, windowHeight, x, y, dx, dy;
+
+	private static Thread thread;
+	private static boolean running = false;
+	static BufferedImage bufferedImage;
 	static Color color;
+	static ImageHandler imageHandler;
 	static InputHandler input;
 	static Insets insets;
 	Sprite mudkip;
-	Screen screen = new Screen(windowWidth, windowHeight);
+	HitBox island;
 	
-	private int[] pixels = ((DataBufferInt)background.getRaster().getDataBuffer()).getData();
-
 	public synchronized void start() {
 		running = true;
 		thread = new Thread(this, "Display");
@@ -43,7 +39,7 @@ public class GameEngine extends JFrame implements Runnable
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void run()
 	{
 		initialize();
@@ -77,28 +73,29 @@ public class GameEngine extends JFrame implements Runnable
 
 	public void initialize()
 	{
-		//eventually i'd prefer to move this data to an .ini instead of the message folder
-		fps = Integer.parseInt(ResourceString.getString("FPS"));
+		fps = Integer.parseInt(ResourceString.getString("FPS"));		
+		imageHandler = new ImageHandler();
+		input = new InputHandler(this);
+		mudkip = new Sprite("mudkip");
 		windowWidth = Integer.parseInt(ResourceString.getString("WindowWidth"));
 		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));
 		
-		input = new InputHandler(this);
-		
-		mudkip = new Sprite("mudkip");
 		x = 10;
 		y = 10;
-		color = Color.YELLOW;
+		
 		setTitle(ResourceString.getString("Title"));
 		setSize(windowWidth, windowHeight);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
+		createBufferStrategy(2);
+		
+		island = new HitBox(200, 200, 200, 200);
 		
 		addMouseListener(input);
 		insets = getInsets();
 		setSize(insets.left + windowWidth + insets.right, insets.top + windowHeight + insets.bottom);
-		//I did this previously
-		//		background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+		bufferedImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 	}
 
 	public void update()
@@ -110,7 +107,7 @@ public class GameEngine extends JFrame implements Runnable
 	{
 		if(input.isKeyDown(KeyEvent.VK_A))
 		{
-			if (x < step)
+			if ((x < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				x = step;
 			else
 				x -= step;
@@ -118,7 +115,7 @@ public class GameEngine extends JFrame implements Runnable
 
 		if(input.isKeyDown(KeyEvent.VK_D))
 		{
-			if (x > (windowWidth - step - mudkip.getHitBox().getWidth()))
+			if ((x > (windowWidth - step - mudkip.getHitBox().getWidth())) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				x = (int) (windowWidth - step - mudkip.getHitBox().getWidth());
 			else
 				x += step;
@@ -126,7 +123,7 @@ public class GameEngine extends JFrame implements Runnable
 
 		if(input.isKeyDown(KeyEvent.VK_W))
 		{
-			if (y < step)
+			if ((y < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				y = step;
 			else
 				y -= step;
@@ -134,43 +131,42 @@ public class GameEngine extends JFrame implements Runnable
 
 		if(input.isKeyDown(KeyEvent.VK_S))
 		{
-			if (y > (windowHeight - step - mudkip.getHitBox().getHeight()))
+			if ((y > (windowHeight - step - mudkip.getHitBox().getHeight())) && (island.isCollide(mudkip.getHitBox().rectangle)))
 				y = (int) (windowHeight - step - mudkip.getHitBox().getHeight());
 			else
 				y += step;
+		}
+		
+		mudkip.setPosx(x);
+		mudkip.setPosy(y);
+		
+		if(island.isCollide(mudkip.getHitBox().rectangle))
+		{
+			System.out.println("COLLIDE!");
 		}
 	}
 
 	public void draw()
 	{
-		//I added a buffer strategy
-		BufferStrategy bs = getBufferStrategy();
+		BufferStrategy bufferStrategy;
+		Graphics graphics, background;
+
+		background = bufferedImage.getGraphics();
 		
-		if (bs == null) {
+		bufferStrategy = getBufferStrategy();
+		if(bufferStrategy == null)
+		{
 			createBufferStrategy(3);
-			return;
 		}
-		
-		Graphics graphics, backgroundGraphics;
 
-		backgroundGraphics = background.getGraphics();		
-
-		screen.clear();
-		screen.render();
-		
-		for (int i = 0; i < pixels.length;i++) {
-			pixels[i] = screen.pixels[i];
-		}
-		
-		backgroundGraphics.setColor(Color.BLACK);
-		backgroundGraphics.fillRect(0, 0, windowWidth, windowHeight);
-		
-		backgroundGraphics.drawImage(mudkip.getIcon(), x, y, this);
-
-		graphics = bs.getDrawGraphics();
-		graphics.drawImage(background, 0, 0, getWidth(), getHeight(), null);
+		background.setColor(Color.CYAN);
+		background.fillRect(0, 0, windowWidth, windowHeight);
+		background.setColor(Color.GREEN);
+		background.fillRect(200, 200, 200, 200);
+		background.drawImage(mudkip.getIcon(), mudkip.getPosx(), mudkip.getPosy(), this);
+		graphics = bufferStrategy.getDrawGraphics();
+		graphics.drawImage(bufferedImage, insets.left, insets.top, this);
 		graphics.dispose();
-		bs.show();
+		bufferStrategy.show();
 	}
-
 }
