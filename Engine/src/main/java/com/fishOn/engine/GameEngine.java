@@ -10,13 +10,15 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
-public class GameEngine extends JFrame
+public class GameEngine extends JFrame implements Runnable
 {
 	private static final long serialVersionUID = -5024743624066497330L;
 	static boolean isRunning = true;
 	static int fps, x, y, dx, dy;
-	static int windowWidth = 400, windowHeight = 300; 
+	static int windowWidth = 300, windowHeight = 300; 
+	boolean running = false;
 	
+	private Thread thread;
 	
 	static BufferedImage background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 	static Color color;
@@ -27,6 +29,21 @@ public class GameEngine extends JFrame
 	
 	private int[] pixels = ((DataBufferInt)background.getRaster().getDataBuffer()).getData();
 
+	public synchronized void start() {
+		running = true;
+		thread = new Thread(this, "Display");
+		thread.start();
+	}
+	
+	public synchronized void stop() {
+		running = true;
+		try {
+			thread.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void run()
 	{
 		initialize();
@@ -80,7 +97,7 @@ public class GameEngine extends JFrame
 		addMouseListener(input);
 		insets = getInsets();
 		setSize(insets.left + windowWidth + insets.right, insets.top + windowHeight + insets.bottom);
-		//I did this previously, maybe we should re do it here?
+		//I did this previously
 		//		background = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 	}
 
