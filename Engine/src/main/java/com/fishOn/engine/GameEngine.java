@@ -106,8 +106,8 @@ public class GameEngine extends JFrame implements Runnable
 		
 		island = new HitBox(200, 200, 200, 200);
 		obstacle = new HitBox((windowWidth/2), (windowHeight-100), 50, 80);
-		System.out.println(windowWidth/2);
-		System.out.println(windowWidth/2+50);
+		//System.out.println(windowWidth/2);
+		//System.out.println(windowWidth/2+50);
 		
 		addMouseListener(input);
 		insets = getInsets();
@@ -141,9 +141,9 @@ public class GameEngine extends JFrame implements Runnable
 			
 			if(obstacle.isCollide(bulbasaur.getHitBox().rectangle))
 			{
-				System.out.println("COLLIDE!");
+				//System.out.println("COLLIDE!");
 				
-				System.out.println(bulbasaur.getHitBox().width);
+				//System.out.println(bulbasaur.getHitBox().width);
 				
 					xb = xb - step;
 
@@ -194,7 +194,7 @@ public class GameEngine extends JFrame implements Runnable
 		{
 			createBufferStrategy(3);
 		}
-		System.out.println(xb);
+		//System.out.println(xb);
 		background.setColor(Color.CYAN);
 		background.fillRect(0, 0, windowWidth, windowHeight);
 		background.setColor(Color.RED);
