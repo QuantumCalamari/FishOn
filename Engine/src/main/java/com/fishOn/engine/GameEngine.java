@@ -26,7 +26,7 @@ public class GameEngine extends JFrame implements Runnable
 	static Insets insets;
 	Sprite mudkip;
 	Sprite bulbasaur;
-	HitBox island, obstacle;
+	HitBox island, obstacle, ground;
 	
 	public synchronized void start() {
 		running = true;
@@ -85,16 +85,18 @@ public class GameEngine extends JFrame implements Runnable
 		windowWidth = Integer.parseInt(ResourceString.getString("WindowWidth"));
 		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));
 		
+		
+		
 		//for collision
-		bulbaHeight = bulbasaur.getHeight();
-		bulbaWidth = bulbasaur.getWidth();
+		bulbasaur.hitBox.setHeight(bulbasaur.getHeight());
+		bulbasaur.hitBox.setWidth(bulbasaur.getWidth());
 		
 		x = 500;
 		y = 10;
 		//bulbasaur's position
 		//the -10 is -50 for the height of the ground and -36 for the size of the sprite
 		xb = 20;
-		yb = windowHeight-86;
+		yb = windowHeight-400;
 	
 		
 		setTitle(ResourceString.getString("Title"));
@@ -104,10 +106,11 @@ public class GameEngine extends JFrame implements Runnable
 		setVisible(true);
 		createBufferStrategy(2);
 		
-		island = new HitBox(200, 200, 200, 200);
+		//island = new HitBox(200, 200, 200, 200);
 		obstacle = new HitBox((windowWidth/2), (windowHeight-100), 50, 80);
-		System.out.println(windowWidth/2);
-		System.out.println(windowWidth/2+50);
+		ground = new HitBox(0, (windowHeight-50), windowWidth, 50);
+		//System.out.println(windowWidth/2);
+		//System.out.println(windowWidth/2+50);
 		
 		addMouseListener(input);
 		insets = getInsets();
@@ -141,10 +144,7 @@ public class GameEngine extends JFrame implements Runnable
 			
 			if(obstacle.isCollide(bulbasaur.getHitBox().rectangle))
 			{
-				System.out.println("COLLIDE!");
-				
-				System.out.println(bulbasaur.getHitBox().width);
-				
+				System.out.println("COLLIDE!");				
 					xb = xb - step;
 
 			}
@@ -153,13 +153,21 @@ public class GameEngine extends JFrame implements Runnable
 				xb = xb + step;
 			else
 				xb += step;
-			
-			if ((x > (windowWidth - step - mudkip.getHitBox().getWidth())) && (island.isCollide(mudkip.getHitBox().rectangle)))
-				x = (int) (windowWidth - step - mudkip.getHitBox().getWidth());
-			else
-				x += step;
 		}
-
+		
+		//this is to prevent double jumps but I'm not okay with it right now
+		/*if (bulbasaur.getPosy() < 440) {
+			bulbasaur.jump = true;
+		} else {
+			bulbasaur.jump = false;
+		}*/
+		
+		if(input.isKeyDown(KeyEvent.VK_SPACE) && (!bulbasaur.jump)) {
+			for (int i = 0; i < 15; i++) {
+			
+			}
+		}
+		
 		if(input.isKeyDown(KeyEvent.VK_W))
 		{
 			if ((y < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
@@ -189,12 +197,24 @@ public class GameEngine extends JFrame implements Runnable
 
 		background = bufferedImage.getGraphics();
 		
+		//drop 10 per frame unless collision with the ground
+		if (ground.isCollide(bulbasaur.getHitBox().rectangle)) {
+			
+		} else {
+			yb = yb + 5;
+		}
+		
+		
+		
+		
 		bufferStrategy = getBufferStrategy();
 		if(bufferStrategy == null)
 		{
 			createBufferStrategy(3);
 		}
-		System.out.println(xb);
+		
+		//System.out.println(bulbasaur.getHitBox().getWidth());
+		
 		background.setColor(Color.CYAN);
 		background.fillRect(0, 0, windowWidth, windowHeight);
 		background.setColor(Color.RED);

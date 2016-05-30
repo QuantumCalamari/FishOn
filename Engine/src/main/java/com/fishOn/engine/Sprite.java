@@ -9,6 +9,7 @@ public class Sprite
 	ImageHandler imageHandler = new ImageHandler();
 	ImageIcon imageIcon;
 	int posx, posy, width, height;
+	boolean jump;
 	HitBox hitBox;
 	
 	//Create a sprite with a specified image
@@ -18,6 +19,7 @@ public class Sprite
 		icon = imageIcon.getImage();
 		width = imageIcon.getIconWidth();
 		height = imageIcon.getIconHeight();
+		jump = false;
 		hitBox = new HitBox(0, 0, width - 20, height - 20);
 	}
 	
