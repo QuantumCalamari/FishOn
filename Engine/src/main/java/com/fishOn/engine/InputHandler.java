@@ -14,7 +14,7 @@ public class InputHandler implements KeyListener, MouseListener
 	public InputHandler(Component c)
 	{
 		c.addKeyListener(this);
-		keys = new boolean[256];	
+		keys = new boolean[256];		
 	}
 	
 	public boolean isKeyDown(int keyCode)

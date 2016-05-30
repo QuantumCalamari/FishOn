@@ -25,7 +25,7 @@ public class HitBox
 		xCollide = true;
 		yCollide = true;
 		
-		if (((spriteHitbox.x + spriteHitbox.width) < rectangle.x) || (spriteHitbox.x > (rectangle.x + rectangle.width)))
+		if (((spriteHitbox.x + (spriteHitbox.width*2)) < rectangle.x) || ((spriteHitbox.width*2) > (rectangle.x + rectangle.width)))
 			xCollide = false;
 		if (((spriteHitbox.y + spriteHitbox.height) < rectangle.y) || (spriteHitbox.y > (rectangle.y + rectangle.height)))
 			yCollide = false;
