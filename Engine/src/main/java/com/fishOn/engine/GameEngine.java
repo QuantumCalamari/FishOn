@@ -16,6 +16,7 @@ public class GameEngine extends JFrame implements Runnable
 	static int fps, windowWidth, windowHeight, x, y, dx, dy;
 	//bulbasaur values
 	int xb, yb, bulbaHeight, bulbaWidth;
+	int g = 3;
 
 	private static Thread thread;
 	private static boolean running = false;
@@ -161,27 +162,15 @@ public class GameEngine extends JFrame implements Runnable
 		} else {
 			bulbasaur.jump = false;
 		}*/
-		
+				
 		if(input.isKeyDown(KeyEvent.VK_SPACE) && (!bulbasaur.jump)) {
-			for (int i = 0; i < 15; i++) {
-			
+			while (yb > 400) {
+				yb = yb - 10;
+				System.out.println(yb);
 			}
-		}
-		
-		if(input.isKeyDown(KeyEvent.VK_W))
-		{
-			if ((y < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
-				y = step;
-			else
-				y -= step;
-		}
-
-		if(input.isKeyDown(KeyEvent.VK_S))
-		{
-			if ((y > (windowHeight - step - mudkip.getHitBox().getHeight())) && (island.isCollide(mudkip.getHitBox().rectangle)))
-				y = (int) (windowHeight - step - mudkip.getHitBox().getHeight());
-			else
-				y += step;
+			while (yb < 400) {
+				yb = yb + 10;
+			}
 		}
 		
 		mudkip.setPosx(x);
@@ -200,9 +189,13 @@ public class GameEngine extends JFrame implements Runnable
 		//drop 10 per frame unless collision with the ground
 		if (ground.isCollide(bulbasaur.getHitBox().rectangle)) {
 			
-		} else {
-			yb = yb + 5;
+		} else if (obstacle.isCollide(bulbasaur.getHitBox().rectangle)) {
+			
 		}
+		else {
+			yb = yb + 1*g;
+		}
+		
 		
 		
 		

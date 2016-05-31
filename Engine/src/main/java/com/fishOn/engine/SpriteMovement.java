@@ -4,8 +4,12 @@ package main.java.com.fishOn.engine;
 
 public class SpriteMovement {
 
-	static public int Jump(Sprite sprite) {
-		int jump = 10;	
+	int y;
+	
+	static public int Jump(Sprite sprite, int y) {
+
+		int jump = 0;
+
 						
 		return jump;
 	}
