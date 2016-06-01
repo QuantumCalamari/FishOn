@@ -27,7 +27,7 @@ public class GameEngine extends JFrame implements Runnable
 	static Insets insets;
 	Sprite mudkip;
 	Sprite bulbasaur;
-	HitBox island, obstacle, ground;
+	HitBox island, obstacle, ground, endWall;
 	
 	public synchronized void start() {
 		running = true;
@@ -82,7 +82,7 @@ public class GameEngine extends JFrame implements Runnable
 		input = new InputHandler(this);
 		mudkip = new Sprite("mudkip");
 		//I added a bulbasaur so I didn't have to untangle your mudkip and I could start again with it
-		bulbasaur = new Sprite("bulba");
+		bulbasaur = new Sprite("bulbaRight");
 		windowWidth = Integer.parseInt(ResourceString.getString("WindowWidth"));
 		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));
 		
@@ -110,6 +110,7 @@ public class GameEngine extends JFrame implements Runnable
 		//island = new HitBox(200, 200, 200, 200);
 		obstacle = new HitBox((windowWidth/2), (windowHeight-100), 50, 80);
 		ground = new HitBox(0, (windowHeight-50), windowWidth, 50);		
+		endWall = new HitBox((windowWidth-20), 0, 20, windowHeight);
 		System.out.println(windowWidth/2);
 		System.out.println(windowHeight-100);
 		
@@ -126,29 +127,38 @@ public class GameEngine extends JFrame implements Runnable
 	
 	public void move(int step)
 	{		
-		if(input.isKeyDown(KeyEvent.VK_A))
+		if(input.isKeyDown(KeyEvent.VK_A) || input.isKeyDown(KeyEvent.VK_LEFT))
 		{
+			//changing sprite depending on direction
+			bulbasaur = new Sprite("bulbaLeft");
 			
 			if (xb < step && (obstacle.isxCollide(bulbasaur.getHitBox().rectangle)))
-				xb = step;
+				{
+				System.out.println("collide");
+				xb = xb + step;
+				}
 			else
 				xb -= step;
 		}
 
-		if(input.isKeyDown(KeyEvent.VK_D))
+		if(input.isKeyDown(KeyEvent.VK_D) || input.isKeyDown(KeyEvent.VK_RIGHT))
 		{
+			//changing sprite depending on direction
+			bulbasaur = new Sprite("bulbaRight");
 			
-			if(obstacle.isxCollide(bulbasaur.getHitBox().rectangle))
+			//we need some method of handling multiple collisions at once, if the game has 200 surfaces we can't expect to do this 200 times
+			
+			if((obstacle.isxCollide(bulbasaur.getHitBox().rectangle)) || (endWall.isxCollide(bulbasaur.getHitBox().rectangle)))
 			{
-				System.out.println("COLLIDE!");
-					xb = xb - step;
+				xb = xb - step;
 			}
 			
-			if ((x > (windowWidth - step - bulbasaur.getHitBox().getWidth())) && (obstacle.isxCollide(bulbasaur.getHitBox().rectangle)))
+			if (((x > (windowWidth - step - bulbasaur.getHitBox().getWidth())) && (obstacle.isxCollide(bulbasaur.getHitBox().rectangle))) && (endWall.isCollide(bulbasaur.getHitBox().rectangle)))
 				xb = xb + step;
 			else
 				xb += step;
-		}
+		
+	}
 		
 		//this is to prevent double jumps but I'm not okay with it right now
 		/*if (bulbasaur.getPosy() < 440) {
