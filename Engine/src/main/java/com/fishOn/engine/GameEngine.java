@@ -84,9 +84,7 @@ public class GameEngine extends JFrame implements Runnable
 		//I added a bulbasaur so I didn't have to untangle your mudkip and I could start again with it
 		bulbasaur = new Sprite("bulbaRight");
 		windowWidth = Integer.parseInt(ResourceString.getString("WindowWidth"));
-		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));
-		
-		
+		windowHeight = Integer.parseInt(ResourceString.getString("WindowHeight"));		
 		
 		//for collision
 		bulbasaur.hitBox.setHeight(bulbasaur.getHeight());
@@ -131,6 +129,8 @@ public class GameEngine extends JFrame implements Runnable
 		{
 			//changing sprite depending on direction
 			bulbasaur = new Sprite("bulbaLeft");
+			bulbasaur.hitBox.setHeight(bulbasaur.getHeight());
+			bulbasaur.hitBox.setWidth(bulbasaur.getWidth());
 			
 			if (xb < step && (obstacle.isxCollide(bulbasaur.getHitBox().rectangle)))
 				{
@@ -144,8 +144,12 @@ public class GameEngine extends JFrame implements Runnable
 		if(input.isKeyDown(KeyEvent.VK_D) || input.isKeyDown(KeyEvent.VK_RIGHT))
 		{
 			//changing sprite depending on direction
+			//it doesn't like it when you don't reset the width and height
 			bulbasaur = new Sprite("bulbaRight");
+			bulbasaur.hitBox.setHeight(bulbasaur.getHeight());
+			bulbasaur.hitBox.setWidth(bulbasaur.getWidth());
 			
+			System.out.println(bulbasaur.posx);
 			//we need some method of handling multiple collisions at once, if the game has 200 surfaces we can't expect to do this 200 times
 			
 			if((obstacle.isxCollide(bulbasaur.getHitBox().rectangle)) || (endWall.isxCollide(bulbasaur.getHitBox().rectangle)))

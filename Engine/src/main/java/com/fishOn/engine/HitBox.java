@@ -40,17 +40,20 @@ public class HitBox
 		xCollide = true;
 		
 		//we should clean this up
-		if ((spriteHitbox.y < rectangle.y) || (spriteHitbox.y > rectangle.y + rectangle.width))
+		if ((spriteHitbox.y + spriteHitbox.height < rectangle.y) || (spriteHitbox.y > rectangle.y + rectangle.height))
 			{
 				xCollide = false;
 			}
 		
-		if (((spriteHitbox.x + spriteHitbox.height) < rectangle.x) || (spriteHitbox.x > (rectangle.x + rectangle.height)))
+		if (((spriteHitbox.x + spriteHitbox.width) < rectangle.x) || (spriteHitbox.x > (rectangle.x + rectangle.width)))
 			{
 				xCollide = false;
 			}	
 		
-		return (xCollide);
+		System.out.println(spriteHitbox.x);
+		System.out.println(spriteHitbox.width);
+		
+		return xCollide;
 	}
 	
 	public boolean isyCollide(Rectangle spriteHitbox)
@@ -70,7 +73,7 @@ public class HitBox
 				yCollide = false;
 			}	
 		
-		return (yCollide);
+		return yCollide;
 	}
 	
 	public int getX()
