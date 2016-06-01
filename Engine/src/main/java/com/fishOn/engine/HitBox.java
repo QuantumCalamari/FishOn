@@ -35,6 +35,7 @@ public class HitBox
 	
 	public boolean isxCollide(Rectangle spriteHitbox)
 	{
+		//x collision doesn't work now for some reason, but I don't think I need it
 		boolean xCollide;		
 		
 		xCollide = true;
@@ -52,6 +53,8 @@ public class HitBox
 		
 		System.out.println(spriteHitbox.x);
 		System.out.println(spriteHitbox.width);
+		System.out.println(rectangle.x);
+		System.out.println(rectangle.width);
 		
 		return xCollide;
 	}

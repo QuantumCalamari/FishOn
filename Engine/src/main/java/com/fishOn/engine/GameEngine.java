@@ -152,7 +152,7 @@ public class GameEngine extends JFrame implements Runnable
 			System.out.println(bulbasaur.posx);
 			//we need some method of handling multiple collisions at once, if the game has 200 surfaces we can't expect to do this 200 times
 			
-			if((obstacle.isxCollide(bulbasaur.getHitBox().rectangle)) || (endWall.isxCollide(bulbasaur.getHitBox().rectangle)))
+			if((obstacle.isxCollide(bulbasaur.getHitBox().rectangle)) || (obstacle.isxCollide(bulbasaur.getHitBox().rectangle)))
 			{
 				xb = xb - step;
 			}
@@ -214,6 +214,8 @@ public class GameEngine extends JFrame implements Runnable
 		
 		background.setColor(Color.CYAN);
 		background.fillRect(0, 0, windowWidth, windowHeight);
+		background.setColor(Color.GRAY);
+		background.fillRect(0, 250, windowWidth, windowHeight - 300);
 		background.setColor(Color.RED);
 		//obstacle
 		background.fillRect((windowWidth/2), (windowHeight-100), 50, 80);
