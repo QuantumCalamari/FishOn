@@ -33,6 +33,46 @@ public class HitBox
 		return (xCollide && yCollide);
 	}
 	
+	public boolean isxCollide(Rectangle spriteHitbox)
+	{
+		boolean xCollide;		
+		
+		xCollide = true;
+		
+		//we should clean this up
+		if ((spriteHitbox.y < rectangle.y) || (spriteHitbox.y > rectangle.y + rectangle.width))
+			{
+				xCollide = false;
+			}
+		
+		if (((spriteHitbox.x + spriteHitbox.height) < rectangle.x) || (spriteHitbox.x > (rectangle.x + rectangle.height)))
+			{
+				xCollide = false;
+			}	
+		
+		return (xCollide);
+	}
+	
+	public boolean isyCollide(Rectangle spriteHitbox)
+	{
+		boolean yCollide;		
+		
+		yCollide = true;
+		
+		//we should clean this up
+		if ((spriteHitbox.x < rectangle.x) || (spriteHitbox.x > rectangle.x + rectangle.width))
+			{
+				yCollide = false;
+			}
+		
+		if (((spriteHitbox.y + spriteHitbox.height) < rectangle.y) || (spriteHitbox.y > (rectangle.y + rectangle.height)))
+			{
+				yCollide = false;
+			}	
+		
+		return (yCollide);
+	}
+	
 	public int getX()
 	{
 		return x;

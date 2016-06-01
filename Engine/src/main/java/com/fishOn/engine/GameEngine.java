@@ -109,9 +109,9 @@ public class GameEngine extends JFrame implements Runnable
 		
 		//island = new HitBox(200, 200, 200, 200);
 		obstacle = new HitBox((windowWidth/2), (windowHeight-100), 50, 80);
-		ground = new HitBox(0, (windowHeight-50), windowWidth, 50);
-		//System.out.println(windowWidth/2);
-		//System.out.println(windowWidth/2+50);
+		ground = new HitBox(0, (windowHeight-50), windowWidth, 50);		
+		System.out.println(windowWidth/2);
+		System.out.println(windowHeight-100);
 		
 		addMouseListener(input);
 		insets = getInsets();
@@ -129,28 +129,22 @@ public class GameEngine extends JFrame implements Runnable
 		if(input.isKeyDown(KeyEvent.VK_A))
 		{
 			
-			if (xb < step && (obstacle.isCollide(bulbasaur.getHitBox().rectangle)))
+			if (xb < step && (obstacle.isxCollide(bulbasaur.getHitBox().rectangle)))
 				xb = step;
 			else
 				xb -= step;
-			
-			/*if ((x < step) && (island.isCollide(mudkip.getHitBox().rectangle)))
-				x = step;
-			else
-				x -= step;*/
 		}
 
 		if(input.isKeyDown(KeyEvent.VK_D))
 		{
 			
-			if(obstacle.isCollide(bulbasaur.getHitBox().rectangle))
+			if(obstacle.isxCollide(bulbasaur.getHitBox().rectangle))
 			{
-				System.out.println("COLLIDE!");				
+				System.out.println("COLLIDE!");
 					xb = xb - step;
-
 			}
 			
-			if ((x > (windowWidth - step - bulbasaur.getHitBox().getWidth())) && (obstacle.isCollide(bulbasaur.getHitBox().rectangle)))
+			if ((x > (windowWidth - step - bulbasaur.getHitBox().getWidth())) && (obstacle.isxCollide(bulbasaur.getHitBox().rectangle)))
 				xb = xb + step;
 			else
 				xb += step;
@@ -187,18 +181,14 @@ public class GameEngine extends JFrame implements Runnable
 		background = bufferedImage.getGraphics();
 		
 		//drop 10 per frame unless collision with the ground
-		if (ground.isCollide(bulbasaur.getHitBox().rectangle)) {
+		if (ground.isyCollide(bulbasaur.getHitBox().rectangle)) {
 			
-		} else if (obstacle.isCollide(bulbasaur.getHitBox().rectangle)) {
+		} else if (obstacle.isyCollide(bulbasaur.getHitBox().rectangle)) {
 			
 		}
 		else {
 			yb = yb + 1*g;
 		}
-		
-		
-		
-		
 		
 		bufferStrategy = getBufferStrategy();
 		if(bufferStrategy == null)
